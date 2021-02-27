@@ -8,97 +8,99 @@ int main()
 {
 	Mat OriginalImg;
 
-	OriginalImg = imread("E:/³µÅÆÊ¶±ğ2ºÅ/³µÅÆ1.jpg", IMREAD_COLOR);//¶ÁÈ¡Ô­Ê¼²ÊÉ«Í¼Ïñ
-	if (OriginalImg.empty())  //ÅĞ¶ÏÍ¼Ïñ¶Ô·ñ¶ÁÈ¡³É¹¦
+	OriginalImg = imread("E:/è½¦ç‰Œè¯†åˆ«2å·/è½¦ç‰Œ2.jpg", IMREAD_COLOR);//è¯»å–åŸå§‹å½©è‰²å›¾åƒ
+	if (OriginalImg.empty())  //åˆ¤æ–­å›¾åƒå¯¹å¦è¯»å–æˆåŠŸ
 	{
-		cout << "´íÎó!¶ÁÈ¡Í¼ÏñÊ§°Ü\n";
+		cout << "é”™è¯¯!è¯»å–å›¾åƒå¤±è´¥\n";
 		return -1;
 	}
-	//imshow("Ô­Í¼", OriginalImg); //ÏÔÊ¾Ô­Ê¼Í¼Ïñ
-	cout << "Width:" << OriginalImg.rows << "\tHeight:" << OriginalImg.cols << endl;//´òÓ¡³¤¿í
+	//imshow("åŸå›¾", OriginalImg); //æ˜¾ç¤ºåŸå§‹å›¾åƒ
+	cout << "Width:" << OriginalImg.rows << "\tHeight:" << OriginalImg.cols << endl;//æ‰“å°é•¿å®½
 
 	Mat ResizeImg;
 	if (OriginalImg.cols > 640)
-	resize(OriginalImg, ResizeImg, Size(640, 640 * OriginalImg.rows / OriginalImg.cols));
-	imshow("³ß´ç±ä»»Í¼", ResizeImg);
+		resize(OriginalImg, ResizeImg, Size(640, 640 * OriginalImg.rows / OriginalImg.cols));
+	imshow("å°ºå¯¸å˜æ¢å›¾", ResizeImg);
 
-	unsigned char pixelB, pixelG, pixelR;  //¼ÇÂ¼¸÷Í¨µÀÖµ
-	unsigned char DifMax = 50;             //»ùÓÚÑÕÉ«Çø·ÖµÄãĞÖµÉèÖÃ
-	unsigned char B = 138, G = 63, R = 23; //¸÷Í¨µÀµÄãĞÖµÉè¶¨£¬Õë¶ÔÓëÀ¶É«³µÅÆ
-	Mat BinRGBImg = ResizeImg.clone();  //¶şÖµ»¯Ö®ºóµÄÍ¼Ïñ
+	unsigned char pixelB, pixelG, pixelR;  //è®°å½•å„é€šé“å€¼
+	unsigned char DifMax = 50;             //åŸºäºé¢œè‰²åŒºåˆ†çš„é˜ˆå€¼è®¾ç½®
+	unsigned char B = 138, G = 63, R = 23; //å„é€šé“çš„é˜ˆå€¼è®¾å®šï¼Œé’ˆå¯¹ä¸è“è‰²è½¦ç‰Œ
+	Mat BinRGBImg = ResizeImg.clone();  //äºŒå€¼åŒ–ä¹‹åçš„å›¾åƒ
 	int i = 0, j = 0;
-	for (i = 0; i < ResizeImg.rows; i++)   //Í¨¹ıÑÕÉ«·ÖÁ¿½«Í¼Æ¬½øĞĞ¶şÖµ»¯´¦Àí
+	for (i = 0; i < ResizeImg.rows; i++)   //é€šè¿‡é¢œè‰²åˆ†é‡å°†å›¾ç‰‡è¿›è¡ŒäºŒå€¼åŒ–å¤„ç†
 	{
 		for (j = 0; j < ResizeImg.cols; j++)
 		{
-			pixelB = ResizeImg.at<Vec3b>(i, j)[0]; //»ñÈ¡Í¼Æ¬¸÷¸öÍ¨µÀµÄÖµ
+			pixelB = ResizeImg.at<Vec3b>(i, j)[0]; //è·å–å›¾ç‰‡å„ä¸ªé€šé“çš„å€¼
 			pixelG = ResizeImg.at<Vec3b>(i, j)[1];
 			pixelR = ResizeImg.at<Vec3b>(i, j)[2];
 
 			if (abs(pixelB - B) < DifMax && abs(pixelG - G) < DifMax && abs(pixelR - R) < DifMax)
-			{                                           //½«¸÷¸öÍ¨µÀµÄÖµºÍ¸÷¸öÍ¨µÀãĞÖµ½øĞĞ±È½Ï
-				BinRGBImg.at<Vec3b>(i, j)[0] = 255;     //·ûºÏÑÕÉ«ãĞÖµ·¶Î§ÄÚµÄÉèÖÃ³É°×É«
+			{                                           //å°†å„ä¸ªé€šé“çš„å€¼å’Œå„ä¸ªé€šé“é˜ˆå€¼è¿›è¡Œæ¯”è¾ƒ
+				BinRGBImg.at<Vec3b>(i, j)[0] = 255;     //ç¬¦åˆé¢œè‰²é˜ˆå€¼èŒƒå›´å†…çš„è®¾ç½®æˆç™½è‰²
 				BinRGBImg.at<Vec3b>(i, j)[1] = 255;
 				BinRGBImg.at<Vec3b>(i, j)[2] = 255;
 			}
 			else
 			{
-				BinRGBImg.at<Vec3b>(i, j)[0] = 0;        //²»·ûºÏÑÕÉ«ãĞÖµ·¶Î§ÄÚµÄÉèÖÃÎªºÚÉ«
+				BinRGBImg.at<Vec3b>(i, j)[0] = 0;        //ä¸ç¬¦åˆé¢œè‰²é˜ˆå€¼èŒƒå›´å†…çš„è®¾ç½®ä¸ºé»‘è‰²
 				BinRGBImg.at<Vec3b>(i, j)[1] = 0;
 				BinRGBImg.at<Vec3b>(i, j)[2] = 0;
 			}
 		}
 	}
-	imshow("»ùÓÚÑÕÉ«ĞÅÏ¢¶şÖµ»¯", BinRGBImg);        //ÏÔÊ¾¶şÖµ»¯´¦ÀíÖ®ºóµÄÍ¼Ïñ
+	imshow("åŸºäºé¢œè‰²ä¿¡æ¯äºŒå€¼åŒ–", BinRGBImg);        //æ˜¾ç¤ºäºŒå€¼åŒ–å¤„ç†ä¹‹åçš„å›¾åƒ
 
-	Mat BinOriImg;     //ĞÎÌ¬Ñ§´¦Àí½á¹ûÍ¼Ïñ
-	Mat element = getStructuringElement(MORPH_RECT, Size(3, 3)); //ÉèÖÃĞÎÌ¬Ñ§´¦Àí´°µÄ´óĞ¡
-	dilate(BinRGBImg, BinOriImg, element);     //½øĞĞ¶à´ÎÅòÕÍ²Ù×÷
+	Mat BinOriImg;     //å½¢æ€å­¦å¤„ç†ç»“æœå›¾åƒ
+	Mat element = getStructuringElement(MORPH_RECT, Size(3, 3)); //è®¾ç½®å½¢æ€å­¦å¤„ç†çª—çš„å¤§å°
+	dilate(BinRGBImg, BinOriImg, element);     //è¿›è¡Œå¤šæ¬¡è†¨èƒ€æ“ä½œ
 	dilate(BinOriImg, BinOriImg, element);
 	dilate(BinOriImg, BinOriImg, element);
 
-	erode(BinOriImg, BinOriImg, element);      //½øĞĞ¶à´Î¸¯Ê´²Ù×÷
+	erode(BinOriImg, BinOriImg, element);      //è¿›è¡Œå¤šæ¬¡è…èš€æ“ä½œ
 	erode(BinOriImg, BinOriImg, element);
 	erode(BinOriImg, BinOriImg, element);
-	imshow("ĞÎÌ¬Ñ§´¦Àíºó", BinOriImg);        //ÏÔÊ¾ĞÎÌ¬Ñ§´¦ÀíÖ®ºóµÄÍ¼Ïñ
-
-	double length, area, rectArea;     //¶¨ÒåÂÖÀªÖÜ³¤¡¢Ãæ»ı¡¢Íâ½ç¾ØĞÎÃæ»ı
-	double rectDegree = 0.0;           //¾ØĞÎ¶È=Íâ½ç¾ØĞÎÃæ»ı/ÂÖÀªÃæ»ı
-	double long2Short = 0.0;           //ÌåÌ¬±È=³¤±ß/¶Ì±ß
-	CvRect rect;           //Íâ½ç¾ØĞÎ
-	CvBox2D box, boxTemp;  //Íâ½Ó¾ØĞÎ
-	CvPoint2D32f pt[4];    //¾ØĞÎ¶¨µã±äÁ¿
-	double axisLong = 0.0, axisShort = 0.0;        //¾ØĞÎµÄ³¤±ßºÍ¶Ì±ß
-	double axisLongTemp = 0.0, axisShortTemp = 0.0;//¾ØĞÎµÄ³¤±ßºÍ¶Ì±ß
-	double LengthTemp;     //ÖĞ¼ä±äÁ¿
-	float  angle = 0;      //¼ÇÂ¼³µÅÆµÄÇãĞ±½Ç¶È
+	imshow("å½¢æ€å­¦å¤„ç†å", BinOriImg);        //æ˜¾ç¤ºå½¢æ€å­¦å¤„ç†ä¹‹åçš„å›¾åƒ
+	
+	double length, area, rectArea;     //å®šä¹‰è½®å»“å‘¨é•¿ã€é¢ç§¯ã€å¤–ç•ŒçŸ©å½¢é¢ç§¯
+	double rectDegree = 0.0;           //çŸ©å½¢åº¦=å¤–ç•ŒçŸ©å½¢é¢ç§¯/è½®å»“é¢ç§¯
+	double long2Short = 0.0;           //ä½“æ€æ¯”=é•¿è¾¹/çŸ­è¾¹
+	CvRect rect;           //å¤–ç•ŒçŸ©å½¢
+	CvBox2D box, boxTemp;  //å¤–æ¥çŸ©å½¢
+	CvPoint2D32f pt[4];    //çŸ©å½¢å®šç‚¹å˜é‡
+	double axisLong = 0.0, axisShort = 0.0;        //çŸ©å½¢çš„é•¿è¾¹å’ŒçŸ­è¾¹
+	double axisLongTemp = 0.0, axisShortTemp = 0.0;//çŸ©å½¢çš„é•¿è¾¹å’ŒçŸ­è¾¹
+	double LengthTemp;     //ä¸­é—´å˜é‡
+	float  angle = 0;      //è®°å½•è½¦ç‰Œçš„å€¾æ–œè§’åº¦
 	float  angleTemp = 0;
-	bool   TestPlantFlag = 0;  //³µÅÆ¼ì²â³É¹¦±êÖ¾Î»
-	cvtColor(BinOriImg, BinOriImg, CV_BGR2GRAY);   //½«ĞÎÌ¬Ñ§´¦ÀíÖ®ºóµÄÍ¼Ïñ×ª»¯Îª»Ò¶ÈÍ¼Ïñ
-	threshold(BinOriImg, BinOriImg, 100, 255, THRESH_BINARY); //»Ò¶ÈÍ¼Ïñ¶şÖµ»¯
+	bool   TestPlantFlag = 0;  //è½¦ç‰Œæ£€æµ‹æˆåŠŸæ ‡å¿—ä½
+	cvtColor(BinOriImg, BinOriImg, CV_BGR2GRAY);   //å°†å½¢æ€å­¦å¤„ç†ä¹‹åçš„å›¾åƒè½¬åŒ–ä¸ºç°åº¦å›¾åƒ
+	threshold(BinOriImg, BinOriImg, 100, 255, THRESH_BINARY); //ç°åº¦å›¾åƒäºŒå€¼åŒ–
 	CvMemStorage *storage = cvCreateMemStorage(0);
-	CvSeq * seq = 0;     //´´½¨Ò»¸öĞòÁĞ,CvSeq±¾Éí¾ÍÊÇÒ»¸ö¿ÉÒÔÔö³¤µÄĞòÁĞ£¬²»ÊÇ¹Ì¶¨µÄĞòÁĞ
+	CvSeq * seq = 0;     //åˆ›å»ºä¸€ä¸ªåºåˆ—,CvSeqæœ¬èº«å°±æ˜¯ä¸€ä¸ªå¯ä»¥å¢é•¿çš„åºåˆ—ï¼Œä¸æ˜¯å›ºå®šçš„åºåˆ—
 	CvSeq * tempSeq = cvCreateSeq(CV_SEQ_ELTYPE_POINT, sizeof(CvSeq), sizeof(CvPoint), storage);
 	int cnt = cvFindContours(&(IplImage(BinOriImg)), storage, &seq, sizeof(CvContour), CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-	//µÚÒ»¸ö²ÎÊıÊÇIplImageÖ¸ÕëÀàĞÍ£¬½«MATÇ¿ÖÆ×ª»»ÎªIplImageÖ¸ÕëÀàĞÍ
-	//·µ»ØÂÖÀªµÄÊıÄ¿ 
-	//»ñÈ¡¶şÖµÍ¼ÏñÖĞÂÖÀªµÄ¸öÊı
-	cout << "number of contours   " << cnt << endl;  //´òÓ¡ÂÖÀª¸öÊı
+	//ç¬¬ä¸€ä¸ªå‚æ•°æ˜¯IplImageæŒ‡é’ˆç±»å‹ï¼Œå°†MATå¼ºåˆ¶è½¬æ¢ä¸ºIplImageæŒ‡é’ˆç±»å‹
+	//è¿”å›è½®å»“çš„æ•°ç›® 
+	//è·å–äºŒå€¼å›¾åƒä¸­è½®å»“çš„ä¸ªæ•°
+	cout << "number of contours   " << cnt << endl;  //æ‰“å°è½®å»“ä¸ªæ•°
+	Mat roi_image;
 	for (tempSeq = seq; tempSeq != NULL; tempSeq = tempSeq->h_next)
 	{
-		length = cvArcLength(tempSeq);       //»ñÈ¡ÂÖÀªÖÜ³¤
-		area = cvContourArea(tempSeq);       //»ñÈ¡ÂÖÀªÃæ»ı
-		if (area > 800 && area < 50000)     //¾ØĞÎÇøÓòÃæ»ı´óĞ¡ÅĞ¶Ï
+		length = cvArcLength(tempSeq);       //è·å–è½®å»“å‘¨é•¿
+		area = cvContourArea(tempSeq);       //è·å–è½®å»“é¢ç§¯
+
+		if (area > 800 && area < 50000)     //çŸ©å½¢åŒºåŸŸé¢ç§¯å¤§å°åˆ¤æ–­
 		{
-			rect = cvBoundingRect(tempSeq, 1);//¼ÆËã¾ØĞÎ±ß½ç
-			boxTemp = cvMinAreaRect2(tempSeq, 0);  //»ñÈ¡ÂÖÀªµÄ¾ØĞÎ
-			cvBoxPoints(boxTemp, pt);              //»ñÈ¡¾ØĞÎËÄ¸ö¶¥µã×ø±ê
-			angleTemp = boxTemp.angle;                 //µÃµ½³µÅÆÇãĞ±½Ç¶È
+			rect = cvBoundingRect(tempSeq, 1);//è®¡ç®—çŸ©å½¢è¾¹ç•Œ
+			boxTemp = cvMinAreaRect2(tempSeq, 0);  //è·å–è½®å»“çš„çŸ©å½¢
+			cvBoxPoints(boxTemp, pt);              //è·å–çŸ©å½¢å››ä¸ªé¡¶ç‚¹åæ ‡
+			angleTemp = boxTemp.angle;                 //å¾—åˆ°è½¦ç‰Œå€¾æ–œè§’åº¦
 
-			axisLongTemp = sqrt(pow(pt[1].x - pt[0].x, 2) + pow(pt[1].y - pt[0].y, 2));  //¼ÆËã³¤Öá£¨¹´¹É¶¨Àí£©
-			axisShortTemp = sqrt(pow(pt[2].x - pt[1].x, 2) + pow(pt[2].y - pt[1].y, 2)); //¼ÆËã¶ÌÖá£¨¹´¹É¶¨Àí£©
+			axisLongTemp = sqrt(pow(pt[1].x - pt[0].x, 2) + pow(pt[1].y - pt[0].y, 2));  //è®¡ç®—é•¿è½´ï¼ˆå‹¾è‚¡å®šç†ï¼‰
+			axisShortTemp = sqrt(pow(pt[2].x - pt[1].x, 2) + pow(pt[2].y - pt[1].y, 2)); //è®¡ç®—çŸ­è½´ï¼ˆå‹¾è‚¡å®šç†ï¼‰
 
-			if (axisShortTemp > axisLongTemp)   //¶ÌÖá´óÓÚ³¤Öá£¬½»»»Êı¾İ
+			if (axisShortTemp > axisLongTemp)   //çŸ­è½´å¤§äºé•¿è½´ï¼Œäº¤æ¢æ•°æ®
 			{
 				LengthTemp = axisLongTemp;
 				axisLongTemp = axisShortTemp;
@@ -106,30 +108,198 @@ int main()
 			}
 			else
 				angleTemp += 90;
-			rectArea = axisLongTemp * axisShortTemp;  //¼ÆËã¾ØĞÎµÄÃæ»ı
-			rectDegree = area / rectArea;     //¼ÆËã¾ØĞÎ¶È£¨±ÈÖµÔ½½Ó½ü1ËµÃ÷Ô½½Ó½ü¾ØĞÎ£©
+			rectArea = axisLongTemp * axisShortTemp;  //è®¡ç®—çŸ©å½¢çš„é¢ç§¯
+			rectDegree = area / rectArea;     //è®¡ç®—çŸ©å½¢åº¦ï¼ˆæ¯”å€¼è¶Šæ¥è¿‘1è¯´æ˜è¶Šæ¥è¿‘çŸ©å½¢ï¼‰
 
-			long2Short = axisLongTemp / axisShortTemp; //¼ÆËã³¤¿í±È
+			long2Short = axisLongTemp / axisShortTemp; //è®¡ç®—é•¿å®½æ¯”
 			if (long2Short > 1 && long2Short < 5.5 && rectDegree > 0.53 && rectDegree < 1.37 && rectArea > 1000 && rectArea < 50000)
 			{
-				Mat GuiRGBImg = ResizeImg.clone();
-				TestPlantFlag = true;             //¼ì²â³µÅÆÇøÓò³É¹¦
-				for (int i = 0; i < 4; ++i)       //»®Ïß¿ò³ö³µÅÆÇøÓò
-					cvLine(&(IplImage(GuiRGBImg)), cvPointFrom32f(pt[i]), cvPointFrom32f(pt[((i + 1) % 4) ? (i + 1) : 0]), CV_RGB(255, 0, 0));
-				imshow("ÌáÈ¡³µÅÆ½á¹ûÍ¼", GuiRGBImg);    //ÏÔÊ¾×îÖÕ½á¹ûÍ¼
+				Mat srcImage = ResizeImg.clone();
+				TestPlantFlag = true;             //æ£€æµ‹è½¦ç‰ŒåŒºåŸŸæˆåŠŸ
+				for (int i = 0; i < 4; ++i)       //åˆ’çº¿æ¡†å‡ºè½¦ç‰ŒåŒºåŸŸ
+					cvLine(&(IplImage(srcImage)), cvPointFrom32f(pt[i]), cvPointFrom32f(pt[((i + 1) % 4) ? (i + 1) : 0]), CV_RGB(255, 0, 0));
+				imshow("æå–è½¦ç‰Œç»“æœå›¾", srcImage);
 
+				roi_image = srcImage(rect);
+				imshow("æå–è½¦ç‰Œç»“æœå›¾", roi_image);    //æ˜¾ç¤ºæœ€ç»ˆç»“æœå›¾
 				box = boxTemp;
-				angle = angleTemp;
+				angle = -angleTemp;
 				axisLong = axisLongTemp;
 				axisShort = axisShortTemp;
-				cout << "ÇãĞ±½Ç¶È£º" << angle << endl;
+				cout << "å€¾æ–œè§’åº¦ï¼š" << angle << endl;
+
+
+				Mat large_image;
+				int col = roi_image.cols, row = roi_image.rows;
+				resize(roi_image, large_image, Size(300, 300 * row / col));
+				imshow("test", large_image);
+
+				Mat gray_img;
+				// ç”Ÿæˆç°åº¦å›¾åƒ
+				cvtColor(large_image, gray_img, CV_BGR2GRAY);
+				// é«˜æ–¯æ¨¡ç³Š
+				Mat img_gau;
+				GaussianBlur(gray_img, img_gau, Size(3, 3), 0, 0);
+				// é˜ˆå€¼åˆ†å‰²
+				Mat img_seg;
+				threshold(img_gau, img_seg, 0, 255, THRESH_BINARY + THRESH_OTSU);
+				// è¾¹ç¼˜æ£€æµ‹ï¼Œæå–è½®å»“
+				Mat img_canny;
+				Canny(img_seg, img_canny, 200, 100);
+				imshow("test1", img_canny);
+
+				vector<vector<Point>> contours;
+				vector<Vec4i> hierarchy;
+				findContours(img_canny, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE, Point());
+				int size = (int)(contours.size());
+				// ä¿å­˜ç¬¦å·è¾¹æ¡†çš„åºå·
+				vector<int> num_order;
+				map<int, int> num_map;
+				for (int i = 0; i < size; i++) {
+					// è·å–è¾¹æ¡†æ•°æ®
+					Rect number_rect = boundingRect(contours[i]);
+					int width = number_rect.width;
+					int height = number_rect.height;
+					// å»é™¤è¾ƒå°çš„å¹²æ‰°è¾¹æ¡†ï¼Œç­›é€‰å‡ºåˆé€‚çš„åŒºåŸŸ
+					if (width > large_image.cols / 10 && height > large_image.rows / 2) {
+						rectangle(img_seg, number_rect.tl(), number_rect.br(), Scalar(255, 255, 255), 1, 1, 0);
+						num_order.push_back(number_rect.x);
+						num_map[number_rect.x] = i;
+					}
+				}
+				// æŒ‰ç¬¦å·é¡ºåºæå–
+				sort(num_order.begin(), num_order.end());
+				for (int i = 0; i < num_order.size(); i++) {
+					Rect number_rect = boundingRect(contours[num_map.find(num_order[i])->second]);
+					Rect choose_rect(number_rect.x, 0, number_rect.width, gray_img.rows);
+					Mat number_img = gray_img(choose_rect);
+					imshow("number" + to_string(i), number_img);
+					// imwrite("number" + to_string(i) + ".jpg", number_img);
+				}
+				imshow("æ·»åŠ æ–¹æ¡†", gray_img);
+				waitKey(0);
+				return 0;
+			
+			
+
+				/*Mat gray_img;
+				// ç”Ÿæˆç°åº¦å›¾åƒ
+				cvtColor(large_image, gray_img, CV_BGR2GRAY);
+				// é«˜æ–¯æ¨¡ç³Š
+				Mat img_gau;
+				GaussianBlur(gray_img, img_gau, Size(3, 3), 0, 0);
+				// é˜ˆå€¼åˆ†å‰²
+				Mat img_threadhold;
+				threshold(img_gau, img_threadhold, 0, 255, THRESH_BINARY + THRESH_OTSU);
+				// åˆ¤æ–­å­—ç¬¦æ°´å¹³ä½ç½®
+				int roi_col = img_threadhold.cols, roi_row = img_threadhold.rows, position1[50], position2[50], roi_width[50];
+				uchar pix;
+				// ç¡®è®¤ä¸º 1 çš„åƒç´ 
+				int pixrow[1000];
+				for (int i = 0; i < roi_col - 1; i++) {
+					for (int j = 0; j < roi_row - 1; j++) {
+						pix = img_threadhold.at<uchar>(j, i);
+						pixrow[i] = 0;
+						if (pix > 0) {
+							pixrow[i] = 1;
+							break;
+						}
+					}
+				}
+				// å¯¹æ•°ç»„è¿›è¡Œæ»¤æ³¢ï¼Œå‡å°‘çªå˜æ¦‚ç‡
+				for (int i = 2; i < roi_col - 1 - 2; i++) {
+					if ((pixrow[i - 1] + pixrow[i - 2] + pixrow[i + 1] + pixrow[i + 2]) >= 3) {
+						pixrow[i] = 1;
+					}
+					else if ((pixrow[i - 1] + pixrow[i - 2] + pixrow[i + 1] + pixrow[i + 2]) <= 1) {
+						pixrow[i] = 0;
+					}
+				}
+				// ç¡®è®¤å­—ç¬¦ä½ç½®
+				int count = 0;
+				bool flage = false;
+				for (int i = 0; i < roi_col - 1; i++) {
+					pix = pixrow[i];
+					if (pix == 1 && !flage) {
+						flage = true;
+						position1[count] = i;
+						continue;
+					}
+					if (pix == 0 && flage) {
+						flage = false;
+						position2[count] = i;
+						count++;
+					}
+					if (i == (roi_col - 2) && flage) {
+						flage = false;
+						position2[count] = i;
+						count++;
+					}
+				}
+				// è®°å½•æ‰€æœ‰å­—ç¬¦å®½åº¦
+				for (int n = 0; n < count; n++) {
+					roi_width[n] = position2[n] - position1[n];
+				}
+				// å‡å»æœ€å¤§å€¼ã€æœ€å°å€¼ï¼Œè®¡ç®—å¹³å‡å€¼ç”¨å­—ç¬¦å®½åº¦æ¥ç­›é€‰
+				int max = roi_width[0], max_index = 0;
+				int min = roi_width[0], min_index = 0;
+				for (int n = 1; n < count; n++) {
+					if (max < roi_width[n]) {
+						max = roi_width[n];
+						max_index = n;
+					}
+					if (min > roi_width[n]) {
+						min = roi_width[n];
+						min_index = n;
+					}
+				}
+				int index = 0;
+				int new_roi_width[50];
+				for (int i = 0; i < count; i++) {
+					if (i == min_index || i == max_index) {}
+					else {
+						new_roi_width[index] = roi_width[i];
+						index++;
+					}
+				}
+				// å–åé¢ä¸‰ä¸ªå€¼çš„å¹³å‡å€¼
+				int avgre = (int)((new_roi_width[count - 3] + new_roi_width[count - 4] + new_roi_width[count - 5]) / 3.0);
+				// å­—æ¯ä½ç½®ä¿¡æ¯ç¡®è®¤ï¼Œç”¨å®½åº¦æ¥ç­›é€‰
+				int licenseX[10], licenseW[10], licenseNum = 0;
+				int countX = 0;
+				for (int i = 0; i < count; i++) {
+					if (roi_width[i] > (avgre - 8) && roi_width[i] < (avgre + 8)) {
+						licenseX[licenseNum] = position1[i];
+						licenseW[licenseNum] = roi_width[i];
+						licenseNum++;
+						countX++;
+						continue;
+					}
+					if (roi_width[i] > (avgre * 2 - 10) && roi_width[i] < (avgre * 2 + 10)) {
+						licenseX[licenseNum] = position1[i];
+						licenseW[licenseNum] = roi_width[i];
+						licenseNum++;
+					}
+				}
+
+				// æˆªå–å­—ç¬¦
+				Mat number_img = Mat(Scalar(0));
+				for (int i = 0; i < countX; i++) {
+					Rect choose_rect(licenseX[i], 0, licenseW[i], gray_img.rows);
+					number_img = gray_img(choose_rect);
+					imshow("number" + to_string(i), number_img);
+					//imwrite("number" + to_string(i) + ".jpg", number_img);
+				}
+				imshow("æ·»åŠ æ–¹æ¡†", gray_img);
+				waitKey();
+				return 0;*/
+
+
+
+
 			}
 		}
 	}
-
-	waitKey();
-	return 0;
-
 }
 
 
